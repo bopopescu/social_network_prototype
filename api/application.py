@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify, abort, url_for
-from users_controller import UsersController
-from exceptions import *
+from flask import Flask, request, jsonify, url_for
+from controllers.users_controller import UsersController
+from helpers.exceptions import *
 
 app = Flask(__name__)
 
@@ -15,7 +15,7 @@ def handle_invalid_usage(error):
 @app.route('/users', methods=['GET', 'POST'])
 def handle_users():
     if request.method == 'GET':
-        return jsonify({'data': UsersController.index()})
+        return jsonify(UsersController.index())
 
     elif request.method == 'POST':
         json_data = request.get_json()
@@ -32,7 +32,7 @@ def handle_users():
             raise APIException('Email already taken', status_code=400)
 
         user = UsersController.new(**data)
-        return jsonify({'data': user}), 201, {'Location': url_for('handle_user', user_id=user['id'], _external=True)}
+        return jsonify(user), 201, {'Location': url_for('handle_user', user_id=user['id'], _external=True)}
 
 
 @app.route('/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -49,10 +49,10 @@ def handle_user(user_id: int):
             'username': json_data['username'],
             'email': json_data['email']
         }
-        return jsonify({'data': UsersController.update(user_id, **data)})
+        return jsonify(UsersController.update(user_id, **data))
 
     else:
-        return jsonify({'data':  UsersController.destroy(user_id)})
+        return jsonify(UsersController.destroy(user_id))
 
 
 if __name__ == '__main__':
