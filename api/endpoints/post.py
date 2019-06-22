@@ -10,6 +10,10 @@ class PostEndpoint(BaseEndpoint):
         return jsonify({'data': PostsController.index()})
 
     @staticmethod
+    def get_user_posts(user_id: int):
+        return jsonify({'data': PostsController.get_user_posts(user_id)})
+
+    @staticmethod
     def get(post_id: int):
         post = PostsController.show(post_id)
         if not post:

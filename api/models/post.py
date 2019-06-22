@@ -36,6 +36,10 @@ class PostModel(BaseModel):
         posts = self.db_session.query(Post).all()
         return [post.serialize for post in posts]
 
+    def user_posts(self, user_id: int):
+        posts = self.db_session.query(Post).filter(Post.user_id == user_id).all()
+        return [post.serialize for post in posts]
+
     def find(self, post_id: int):
         post = self.db_session.query(Post).filter(Post.id == post_id).first()
         if not post:

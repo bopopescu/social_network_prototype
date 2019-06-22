@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from helpers.exceptions import APIException
 from endpoints.user import UserEndpoint
 from endpoints.post import PostEndpoint
+from endpoints.comment import CommentEndpoint
 
 app = Flask(__name__)
 
@@ -36,7 +37,7 @@ def handle_user(user_id: int):
 @app.route('/users/<int:user_id>/posts', methods=['GET', 'POST'])
 def handle_posts(user_id: int):
     if request.method == 'GET':
-        return PostEndpoint.get_entities()
+        return PostEndpoint.get_user_posts(user_id)
     else:
         return PostEndpoint.post(user_id, request)
 
@@ -54,19 +55,19 @@ def handle_post(user_id: int, post_id: int):
 @app.route('/users/<int:user_id>/posts/<int:post_id>/comments', methods=['GET', 'POST'])
 def handle_comments(user_id: int, post_id: int):
     if request.method == 'GET':
-        return jsonify({'user_id': user_id})
+        return CommentEndpoint.get_post_comments(post_id)
     else:
-        pass
+        return CommentEndpoint.post(post_id, request)
 
 
 @app.route('/users/<int:user_id>/posts/<int:post_id>/comments/<int:comment_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_comment(user_id: int, post_id: int, comment_id: int):
     if request.method == 'GET':
-        return jsonify({'user_id': user_id, 'comment_id': comment_id})
+        return CommentEndpoint.get(comment_id)
     elif request.method == 'PUT':
-        pass
+        return CommentEndpoint.put(comment_id, request)
     else:
-        pass
+        return CommentEndpoint.delete(comment_id)
 
 
 if __name__ == '__main__':

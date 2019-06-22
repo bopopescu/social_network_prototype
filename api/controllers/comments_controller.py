@@ -16,6 +16,10 @@ class CommentsController(BaseController):
         return CommentsController.model().all()
 
     @staticmethod
+    def get_post_comments(post_id: int):
+        return CommentsController.model().get_post_comments(post_id)
+
+    @staticmethod
     def show(comment_id: int):
         return CommentsController.model().find(comment_id)
 

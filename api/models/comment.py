@@ -35,6 +35,10 @@ class CommentModel(BaseModel):
         comments = self.db_session.query(Comment).all()
         return [comment.serialize for comment in comments]
 
+    def get_post_comments(self, post_id: int):
+        comments = self.db_session.query(Comment).filter(Comment.post_id == post_id).all()
+        return [comment.serialize for comment in comments]
+
     def find(self, comment_id: int):
         comment = self.db_session.query(Comment).filter(Comment.id == comment_id).first()
         if not comment:

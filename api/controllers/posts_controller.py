@@ -16,6 +16,10 @@ class PostsController(BaseController):
         return PostsController.model().all()
 
     @staticmethod
+    def get_user_posts(user_id: int):
+        return PostsController.model().user_posts(user_id)
+
+    @staticmethod
     def show(post_id: int):
         return PostsController.model().find(post_id)
 
